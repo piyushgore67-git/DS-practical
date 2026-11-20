@@ -1,0 +1,166 @@
+
+Lab assignment:8
+
+#include <stdio.h>
+#define TABLE_SIZE 10
+#define EMPTY -1
+int hashTable[TABLE_SIZE];
+// Initialize hash table
+Void initialize() {
+    int i;
+    For (i = 0; i < TABLE_SIZE; i++) {
+        hashTable[i] = EMPTY;
+    }
+}
+// Insert book ID using linear probing
+Void insert(int key) {
+    int index = key % TABLE_SIZE;
+    int pos, i;
+    For (i = 0; i < TABLE_SIZE; i++) {
+        Pos = (index + i) % TABLE_SIZE;
+        If (hashTable[pos] == EMPTY) {
+            hashTable[pos] = key;
+            printf(“Book ID inserted successfully.\n”);
+            return;
+        }
+        If (hashTable[pos] == key) {
+            Printf(“Book ID already exists.\n”);
+            Return;
+        }
+    }
+    Printf(“Hash table is full.\n”);
+}
+// Search for a book ID
+Void search(int key) {
+    int index = key % TABLE_SIZE;
+    int pos, i;
+    For (i = 0; i < TABLE_SIZE; i++) {
+        Pos = (index + i) % TABLE_SIZE;
+       If (hashTable[pos] == EMPTY) {
+            Printf(“Book ID not found.\n”);
+            Return;
+        }
+        If (hashTable[pos] == key) {
+            Printf(“Book ID found at position %d.\n”, pos);
+            Return;
+        }
+    }
+    Printf(“Book ID not found.\n”);
+}
+// Display hash table
+Void display() {
+    int i;
+    Printf(“\nHash Table:\n”);
+    For (i = 0; i < TABLE_SIZE; i++) {
+        If (hashTable[i] == EMPTY) {
+            Printf(“Index %d : EMPTY\n”, i);
+        }
+        Else {
+            Printf(“Index %d : %d\n”, i, hashTable[i]);
+        }
+    }
+}
+// Main function
+int main() {
+    int choice, key;
+    Initialize();
+    Do {
+        Printf(“\n--- Library Book Indexing ---\n”);
+        Printf(“1. Insert Book ID\n”);
+        Printf(“2. Search Book ID\n”);
+        Printf(“3. Display Hash Table\n”);
+        Printf(“4. Exit\n”);
+        Printf(“Enter your choice: “);
+        Scanf(“%d”, &choice);
+        Switch (choice) {
+
+            Case 1:
+                Printf(“Enter Book ID: “);
+                Scanf(“%d”, &key);
+                If (key < 0) {
+                    Printf(“Book ID must be non-negative.\n”);
+                }
+                Else {
+                    Insert(key);
+                }
+                Break;
+
+            Case 2:
+                Printf(“Enter Book ID to search: “);
+                Scanf(“%d”, &key);
+               If (key < 0) {
+                    Printf(“Invalid Book ID.\n”);
+                }
+                Else {
+                    Search(key);
+                }
+                Break;
+
+            Case 3:
+                Display();
+                Break;
+
+            Case 4:
+                Printf(“Exiting program.\n”);
+                Break;
+
+            Default:
+                Printf(“Invalid choice! Try again.\n”);
+        }
+    } while (choice != 4);
+    Return 0;
+}
+
+Output:
+
+--- Library Book Indexing ---
+1. Insert Book ID
+2. Search Book ID
+3. Display Hash Table
+4. Exit
+
+Enter your choice: 1
+Enter Book ID: 25
+Book ID inserted successfully.
+
+Enter your choice: 1
+Enter Book ID: 35
+Book ID inserted successfully.
+
+Enter your choice: 1
+Enter Book ID: 45
+Book ID inserted successfully.
+
+Enter your choice: 1
+Enter Book ID: 15
+Book ID inserted successfully.
+
+Enter your choice: 3
+
+Hash Table:
+Index 0 : EMPTY
+Index 1 : EMPTY
+Index 2 : EMPTY
+Index 3 : EMPTY
+Index 4 : EMPTY
+Index 5 : 25
+Index 6 : 35
+Index 7 : 45
+Index 8 : 15
+Index 9 : EMPTY
+
+Enter your choice: 2
+Enter Book ID to search: 45
+Book ID found at position 7.
+
+Enter your choice: 2
+Enter Book ID to search: 100
+Book ID not found.
+
+Enter your choice: 4
+Exiting program.
+
+
+
+
+

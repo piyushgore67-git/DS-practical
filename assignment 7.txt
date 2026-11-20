@@ -1,0 +1,129 @@
+Title:- Social Network connectivity using Graph traversal.
+
+Lab Assignment 7
+
+#include <stdio.h>
+#include <stdlib.h>
+#define MAX_NODES 100
+// Structure for an adjacency list node
+typedef struct AdjListNode {
+int dest;
+struct AdjListNode* next;
+} AdjListNode;
+// Structure for the adjacency list of a vertex
+typedef struct AdjList {
+AdjListNode* head;
+} AdjList;
+// Structure for the Graph
+typedef struct Graph {
+int V; // Number of vertices
+AdjList array[MAX_NODES];
+} Graph;
+// Create a new adjacency list node
+AdjListNode* newAdjListNode(int dest) {
+AdjListNode* newNode =
+(AdjListNode*)malloc(sizeof(AdjListNode));
+newNode->dest = dest;
+newNode->next = NULL;
+return newNode;
+} // Initialize a graph with V vertices
+Graph* createGraph(int V) {
+Graph* graph = (Graph*)malloc(sizeof(Graph));
+graph->V = V;
+for (int i = 0; i < V; ++i)
+graph->array[i].head = NULL;
+return graph;
+}
+// a. Add a bidirectional connection (edge) between user src and dest
+void addConnection(Graph* graph, int src, int dest) {
+// Add edge from src to dest
+AdjListNode* newNode = newAdjListNode(dest);
+newNode->next = graph->array[src].head;
+graph->array[src].head = newNode;
+// Add edge from dest to src (undirected/bidirectional graph)
+newNode = newAdjListNode(src);
+newNode->next = graph->array[dest].head;
+graph->array[dest].head = newNode;
+}
+// b. Perform Breadth First Search (BFS) starting from a given user
+void bfs(Graph* graph, int startVertex) {
+bool visited[MAX_NODES] = {false};
+int queue[MAX_NODES];
+int front = 0, rear = 0;
+visited[startVertex] = true;
+queue[rear++] = startVertex;
+printf("BFS Traversal starting from user %d: ", startVertex);
+while (front < rear) {
+int currentVertex = queue[front++];
+printf("%d ", currentVertex);
+AdjListNode* temp = graph->array[currentVertex].head;
+while (temp) {
+int adjVertex = temp->dest;
+if (!visited[adjVertex]) {
+visited[adjVertex] = true;
+queue[rear++] = adjVertex;
+} temp = temp->next;
+}
+}
+printf("\n");
+}
+// Helper function for DFS
+void dfsUtil(Graph* graph, int vertex, bool visited[]) {
+visited[vertex] = true;
+printf("%d ", vertex);
+AdjListNode* temp = graph->array[vertex].head;
+while (temp) {
+int adjVertex = temp->dest;
+if (!visited[adjVertex]) {
+dfsUtil(graph, adjVertex, visited);
+}
+temp = temp->next;
+}
+}
+// c. Perform Depth First Search (DFS) starting from a given user
+void dfs(Graph* graph, int startVertex) {
+bool visited[MAX_NODES] = {false};
+printf("DFS Traversal starting from user %d: ", startVertex);
+dfsUtil(graph, startVertex, visited);
+printf("\n");
+}
+// Function to print the adjacency list of the graph
+void printGraph(Graph* graph) {
+for (int v = 0; v < graph->V; ++v) {
+AdjListNode* pCrawl = graph->array[v].head;
+printf("\nUser %d connected to: ", v);
+while (pCrawl) {
+printf("%d -> ", pCrawl->dest);
+pCrawl = pCrawl->next;
+}
+printf("NULL\n");
+} }
+// Driver code
+int main() {
+int numUsers = 5; // Representing users 0, 1, 2, 3, 4
+Graph* graph = createGraph(numUsers);
+// a. Add connections between users
+addConnection(graph, 0, 1);
+addConnection(graph, 0, 2);
+addConnection(graph, 1, 3);
+addConnection(graph, 1, 4);
+printGraph(graph);
+printf("\n--- Graph Traversals ---\n");
+// b. Perform BFS
+bfs(graph, 0);
+// c. Perform DFS
+dfs(graph, 0);
+return 0;
+}
+
+=================================================
+student@TAEComp-01:~/Desktop/Manasvi.DSlab$ g++ lab7.c
+student@TAEComp-01:~/Desktop/Manasvi.DSlab$ ./a.out
+User 0 connected to: 2 -> 1 -> NULL
+User 1 connected to: 4 -> 3 -> 0 -> NULL
+User 2 connected to: 0 -> NULL
+User 3 connected to: 1 -> NULL
+User 4 connected to: 1 -> NULL
+--- Graph Traversals ---
+BFS Traversal starting from user 0: 0 2 1 4 3
+DFS Traversal starting from user 0: 0 2 1 4 3
